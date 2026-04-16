@@ -1,6 +1,6 @@
 // Fragment that configures an mira016
 
-cam_node: mira016@10 {
+cam_node: mira016@36 {
 	compatible = "ams,mira016";
 	reg = <0x36>;
 	status = "disabled";

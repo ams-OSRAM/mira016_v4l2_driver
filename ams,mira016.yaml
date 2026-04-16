@@ -76,9 +76,9 @@ examples:
         #address-cells = <1>;
         #size-cells = <0>;
 
-        mira016: sensor@10 {
-            compatible = "sony,mira016";
-            reg = <0x10>;
+        mira016: sensor@36 {
+            compatible = "ams,mira016";
+            reg = <0x36>;
             clocks = <&mira016_clk>;
             vdd28-supply = <&cam1_reg>;   /* 2.8v */
             vdd11-supply = <&cam_dummy_reg>;   /* 1.1v */
