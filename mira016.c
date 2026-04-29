@@ -3048,6 +3048,12 @@ static const u32 mira016_mbus_formats[] = {
 
 };
 
+static const u32 mira016_mbus_mono_formats[] = {
+	//MEDIA_BUS_FMT_Y12_1X12,
+	MEDIA_BUS_FMT_Y10_1X10,
+	MEDIA_BUS_FMT_Y8_1X8,
+	
+};
 /* Mode configs */
 /*
  * Only one mode is exposed to the public (576x768 at 12 bit).
@@ -3103,32 +3109,32 @@ static const struct mira016_mode supported_modes[] = {
 		.gain_step = 1,
 		.gain_max = ARRAY_SIZE(fine_gain_lut_10bit_hs_4x) - 1,
 	},
-	{
-		/* 12 bit mode */
-		.width = 400,
-		.height = 400,
-		.crop = {
-			.left = MIRA016_PIXEL_ARRAY_LEFT,
-			.top = MIRA016_PIXEL_ARRAY_TOP,
-			.width = 400,
-			.height = 400},
-		.reg_list_pre_soft_reset = {
-			.num_of_regs = ARRAY_SIZE(full_400_400_100fps_12b_1lane_reg_pre_soft_reset),
-			.regs = full_400_400_100fps_12b_1lane_reg_pre_soft_reset,
-		},
-		.reg_list_post_soft_reset = {
-			.num_of_regs = ARRAY_SIZE(full_400_400_100fps_12b_1lane_reg_post_soft_reset),
-			.regs = full_400_400_100fps_12b_1lane_reg_post_soft_reset,
-		},
-		.min_vblank = MIRA016_MIN_VBLANK_60,
-		.max_vblank = MIRA016_MAX_VBLANK,
-		.hblank = MIRA016_HBLANK, // TODO
-		.bit_depth = 12,
-		.code = MEDIA_BUS_FMT_SGRBG12_1X12,
-		.gain_min = 0,
-		.gain_step = 24,
-		.gain_max = 24, // refer to the lookup table.
-	},
+	// {
+	// 	/* 12 bit mode */
+	// 	.width = 400,
+	// 	.height = 400,
+	// 	.crop = {
+	// 		.left = MIRA016_PIXEL_ARRAY_LEFT,
+	// 		.top = MIRA016_PIXEL_ARRAY_TOP,
+	// 		.width = 400,
+	// 		.height = 400},
+	// 	.reg_list_pre_soft_reset = {
+	// 		.num_of_regs = ARRAY_SIZE(full_400_400_100fps_12b_1lane_reg_pre_soft_reset),
+	// 		.regs = full_400_400_100fps_12b_1lane_reg_pre_soft_reset,
+	// 	},
+	// 	.reg_list_post_soft_reset = {
+	// 		.num_of_regs = ARRAY_SIZE(full_400_400_100fps_12b_1lane_reg_post_soft_reset),
+	// 		.regs = full_400_400_100fps_12b_1lane_reg_post_soft_reset,
+	// 	},
+	// 	.min_vblank = MIRA016_MIN_VBLANK_60,
+	// 	.max_vblank = MIRA016_MAX_VBLANK,
+	// 	.hblank = MIRA016_HBLANK, // TODO
+	// 	.bit_depth = 12,
+	// 	.code = MEDIA_BUS_FMT_SGRBG12_1X12,
+	// 	.gain_min = 0,
+	// 	.gain_step = 24,
+	// 	.gain_max = 24, // refer to the lookup table.
+	// },
 
 };
 
@@ -4019,17 +4025,17 @@ static u32 mira016_get_format_code(struct mira016 *mira016, u32 code)
 {
 	unsigned int i;
 
-	for (i = 0; i < ARRAY_SIZE(mira016_mbus_formats); i++)
-		if (mira016_mbus_formats[i] == code)
+	for (i = 0; i < ARRAY_SIZE(mira016_mbus_mono_formats); i++)
+		if (mira016_mbus_mono_formats[i] == code)
 			break;
 
-	if (i >= ARRAY_SIZE(mira016_mbus_formats))
+	if (i >= ARRAY_SIZE(mira016_mbus_mono_formats))
 		i = 0;
 
-	i = (i & ~3) | (mira016->vflip->val ? 2 : 0) | (mira016->hflip->val ? 0 : 1);
+	// i = (i & ~3) | (mira016->vflip->val ? 2 : 0) | (mira016->hflip->val ? 0 : 1);
 
 
-	return mira016_mbus_formats[i];
+	return mira016_mbus_mono_formats[i];
 }
 
 
@@ -4204,7 +4210,7 @@ static int mira016_init_state(struct v4l2_subdev *sd,
 		.which = V4L2_SUBDEV_FORMAT_TRY,
 		.pad = 0,
 		.format = {
-			.code = MEDIA_BUS_FMT_SGRBG8_1X8,
+			.code = MEDIA_BUS_FMT_Y8_1X8,
 			.width = supported_modes[0].width,
 			.height = supported_modes[0].height,
 		},
@@ -4359,11 +4365,11 @@ static int mira016_enum_mbus_code(struct v4l2_subdev *sd,
 {
 	struct mira016 *mira016 = to_mira016(sd);
 
-	if (code->index >= (ARRAY_SIZE(mira016_mbus_formats) / 4))
+	if (code->index >= (ARRAY_SIZE(mira016_mbus_mono_formats) ))
 		return -EINVAL;
 
 	code->code = mira016_get_format_code(
-		mira016, mira016_mbus_formats[code->index * 4]);
+		mira016, mira016_mbus_mono_formats[code->index ]);
 
 	return 0;
 }
@@ -4420,7 +4426,7 @@ static int mira016_start_streaming(struct mira016 *mira016,
 		goto err_rpm_put;
 	}
 	printk(KERN_INFO "[MIRA016]: Register sequence for %d bit mode will be used.\n", mira016->mode->bit_depth);
-	usleep_range(100000, 150000);
+	fsleep(150000);
 
 	if (mira016->skip_reg_upload == 0)
 	{
