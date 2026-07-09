@@ -13,7 +13,7 @@ make
 Place it in the kernel modules folder.
 
 ```
-sudo cp mira016.ko /lib/modules/$(uname -r)
+sudo mkdir -p /lib/modules/$(uname -r)/updates && sudo cp mira050.ko /lib/modules/$(uname -r)/updates/
 ```
 
 Resolve modules dependencies.
