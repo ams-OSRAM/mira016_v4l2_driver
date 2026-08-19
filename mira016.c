@@ -3049,7 +3049,7 @@ static const u32 mira016_mbus_formats[] = {
 };
 
 static const u32 mira016_mbus_mono_formats[] = {
-	//MEDIA_BUS_FMT_Y12_1X12,
+	MEDIA_BUS_FMT_Y12_1X12,
 	MEDIA_BUS_FMT_Y10_1X10,
 	MEDIA_BUS_FMT_Y8_1X8,
 	
@@ -3109,32 +3109,32 @@ static const struct mira016_mode supported_modes[] = {
 		.gain_step = 1,
 		.gain_max = ARRAY_SIZE(fine_gain_lut_10bit_hs_4x) - 1,
 	},
-	// {
-	// 	/* 12 bit mode */
-	// 	.width = 400,
-	// 	.height = 400,
-	// 	.crop = {
-	// 		.left = MIRA016_PIXEL_ARRAY_LEFT,
-	// 		.top = MIRA016_PIXEL_ARRAY_TOP,
-	// 		.width = 400,
-	// 		.height = 400},
-	// 	.reg_list_pre_soft_reset = {
-	// 		.num_of_regs = ARRAY_SIZE(full_400_400_100fps_12b_1lane_reg_pre_soft_reset),
-	// 		.regs = full_400_400_100fps_12b_1lane_reg_pre_soft_reset,
-	// 	},
-	// 	.reg_list_post_soft_reset = {
-	// 		.num_of_regs = ARRAY_SIZE(full_400_400_100fps_12b_1lane_reg_post_soft_reset),
-	// 		.regs = full_400_400_100fps_12b_1lane_reg_post_soft_reset,
-	// 	},
-	// 	.min_vblank = MIRA016_MIN_VBLANK_60,
-	// 	.max_vblank = MIRA016_MAX_VBLANK,
-	// 	.hblank = MIRA016_HBLANK, // TODO
-	// 	.bit_depth = 12,
-	// 	.code = MEDIA_BUS_FMT_SGRBG12_1X12,
-	// 	.gain_min = 0,
-	// 	.gain_step = 24,
-	// 	.gain_max = 24, // refer to the lookup table.
-	// },
+	{
+		/* 12 bit mode */
+		.width = 400,
+		.height = 400,
+		.crop = {
+			.left = MIRA016_PIXEL_ARRAY_LEFT,
+			.top = MIRA016_PIXEL_ARRAY_TOP,
+			.width = 400,
+			.height = 400},
+		.reg_list_pre_soft_reset = {
+			.num_of_regs = ARRAY_SIZE(full_400_400_100fps_12b_1lane_reg_pre_soft_reset),
+			.regs = full_400_400_100fps_12b_1lane_reg_pre_soft_reset,
+		},
+		.reg_list_post_soft_reset = {
+			.num_of_regs = ARRAY_SIZE(full_400_400_100fps_12b_1lane_reg_post_soft_reset),
+			.regs = full_400_400_100fps_12b_1lane_reg_post_soft_reset,
+		},
+		.min_vblank = MIRA016_MIN_VBLANK_60,
+		.max_vblank = MIRA016_MAX_VBLANK,
+		.hblank = MIRA016_HBLANK, // TODO
+		.bit_depth = 12,
+		.code = MEDIA_BUS_FMT_SGRBG12_1X12,
+		.gain_min = 0,
+		.gain_step = 24,
+		.gain_max = 24, // refer to the lookup table.
+	 },
 
 };
 
